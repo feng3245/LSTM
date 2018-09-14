@@ -2,10 +2,13 @@ import numpy as np
 from random import randint
 from numpy import array
 from numpy import argmax
+import keras
 from keras.models import Sequential
 from keras.layers import LSTM
 from keras.layers import Dense
 from keras.layers import Activation
+from keras.layers import BatchNormalization
+from keras.regularizers import Regularizer
 from keras import optimizers
 def generate_sequence(length, n_features):
 	return [randint(0, n_features-1) for _ in range(length)]
@@ -31,9 +34,11 @@ length = 10
 n_features = 15
 out_index = 2
 model = Sequential()
-model.add(LSTM(100, input_shape=[length, n_features]))
+#, W_regularizer=keras.regularizers.l2(0.000001)
+model.add(LSTM(100, input_shape=[length, n_features], dropout_W=0.5))
+
 model.add(Dense(n_features, activation ='softmax'))
-sgd = optimizers.SGD(lr=0.007, decay=1e-4, momentum=0.9, nesterov=True)
+sgd = optimizers.SGD(lr=0.5, decay=1e-4, momentum=0.90, nesterov=True, clipvalue=0.005)
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metric=['accuracy'])
 model.summary()
 
