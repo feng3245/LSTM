@@ -32,7 +32,7 @@ def generate_example(length, n_features, out_index):
 	return X, y
 length = 10
 n_features = 15
-out_index = 2
+out_index = 6
 model = Sequential()
 #, W_regularizer=keras.regularizers.l2(0.000001)
 model.add(LSTM(100, input_shape=[length, n_features], dropout_W=0.5))
