@@ -1,6 +1,7 @@
 from math import ceil, log10
 from keras.models import Sequential
 from keras.layers import LSTM, RepeatVector, TimeDistributed, Dense
+from keras import optimizers
 from generatesample import generate_data, invert
 
 n_terms = 3
@@ -16,14 +17,15 @@ n_in_seq_length = int(n_terms * ceil(log10(largest+1)) + n_terms - 1)
 n_out_seq_length = int(ceil(log10(n_terms * (largest+1))))
 
 model = Sequential()
-model.add(LSTM(75, input_shape=(n_in_seq_length, n_chars)))
+model.add(LSTM(ceil(n_in_seq_length*n_in_seq_length*1.171875), input_shape=(n_in_seq_length, n_chars)))
 model.add(RepeatVector(n_out_seq_length))
-model.add(LSTM(50, return_sequences = True))
+model.add(LSTM(ceil(5*n_in_seq_length*n_out_seq_length), return_sequences = True))
 model.add(TimeDistributed(Dense(n_chars, activation='softmax')))
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+sgd = optimizers.SGD(lr=0.5, decay=1e-4, momentum=0.9, nesterov=True, clipvalue=0.06)
+model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 model.summary()
 
-X, y = generate_data(75000, n_terms, largest, alphabet)
+X, y = generate_data(ceil(292.96875*n_in_seq_length*n_in_seq_length*n_out_seq_length*n_out_seq_length), n_terms, largest, alphabet)
 model.fit(X, y, epochs=1, batch_size=32)
 
 X, y = generate_data(100, n_terms, largest, alphabet)
