@@ -2,10 +2,12 @@ from random import seed
 from random import randint
 from math import ceil, log10
 from numpy import array, argmax
+
+#To handle variable equation one must train for it
 def random_sum_pairs(n_examples, n_numbers, largest):
     X, y = list(), list()
     for _ in range(n_examples):
-        in_pattern = [randint(1, largest) for _ in range(n_numbers)]
+        in_pattern = [randint(1, largest) for _ in range(randint(2,n_numbers))]
         out_pattern = sum(in_pattern)
         X.append(in_pattern)
         y.append(out_pattern)

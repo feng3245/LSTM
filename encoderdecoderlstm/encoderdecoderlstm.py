@@ -4,7 +4,7 @@ from keras.layers import LSTM, RepeatVector, TimeDistributed, Dense
 from keras import optimizers
 from generatesample import generate_data, invert
 
-n_terms = 3
+n_terms = 5
 
 largest = 10
 
@@ -25,7 +25,7 @@ sgd = optimizers.SGD(lr=0.5, decay=1e-4, momentum=0.9, nesterov=True, clipvalue=
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 model.summary()
 
-X, y = generate_data(ceil(292.96875*n_in_seq_length*n_in_seq_length*n_out_seq_length*n_out_seq_length), n_terms, largest, alphabet)
+X, y = generate_data(ceil(2343.75*n_in_seq_length*n_out_seq_length*n_out_seq_length), n_terms, largest, alphabet)
 model.fit(X, y, epochs=1, batch_size=32)
 
 X, y = generate_data(100, n_terms, largest, alphabet)
