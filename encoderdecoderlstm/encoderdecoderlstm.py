@@ -4,17 +4,17 @@ from keras.layers import LSTM, RepeatVector, TimeDistributed, Dense
 from keras import optimizers
 from generatesample import generate_data, invert
 
-n_terms = 5
+n_terms = 3
 
 largest = 10
 
-alphabet = [str(x) for x in range(10)] + ['+', ' ']
+alphabet = [str(x) for x in range(10)] + ['+', '-', '*', '/',' ']
 
 n_chars = len(alphabet)
 
 n_in_seq_length = int(n_terms * ceil(log10(largest+1)) + n_terms - 1)
 
-n_out_seq_length = int(ceil(log10(n_terms * (largest+1))))
+n_out_seq_length = int(ceil(log10(pow(largest+1, n_terms))))
 
 model = Sequential()
 model.add(LSTM(ceil(n_in_seq_length*n_in_seq_length*1.171875), input_shape=(n_in_seq_length, n_chars)))
