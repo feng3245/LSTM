@@ -6,12 +6,18 @@ from randomrect import get_samples, plot_rectangle
 model = Sequential()
 model.add(LSTM(10, input_shape=(1, 2)))
 model.add(Dense(2, activation='linear'))
-model.compile(loss='mae', optimizer='adam')
+model.compile(loss='mae', optimizer='adam', metrics=['acc'])
 model.summary()
+
+#this isn't useful yet
+
+histories = list()
 
 for i in range(25000):
     X, y = get_samples()
-    model.fit(X, y, epochs=1, verbose=2, shuffle=False)
+    history = model.fit(X, y, epochs=1, verbose=2, shuffle=False)
+    histories.append(history.history)
+print(histories)
 
 def generate_rectangle(model):
     rect = list()
